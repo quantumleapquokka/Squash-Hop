@@ -25,12 +25,14 @@ class Menu extends Phaser.Scene {
 
     create() {
         // blob animation configuration
-        this.anims.create({
-            key: 'blobJump',
-            frames: this.anims.generateFrameNumbers('blob', {start: 0, end: 2}),
-            frameRate: 8,
-        })
-
+        if (!this.anims.exists('blobJump')) {
+            this.anims.create({
+                key: 'blobJump',
+                frames: this.anims.generateFrameNumbers('blob', {start: 0, end: 2}),
+                frameRate: 8,
+            })
+        }
+        
         // background color
         this.cameras.main.setBackgroundColor('#b18fd0'); 
 
@@ -52,22 +54,26 @@ class Menu extends Phaser.Scene {
         menuConfig.fontSize = '50px'
         this.add.text(game.config.width/2, game.config.height/2 - borderUISize, 'GAME INSTRUCTIONS', menuConfig).setOrigin(0.5)
         menuConfig.fontSize = '35px'
-        this.add.text(game.config.width/2, game.config.height/2 - borderUISize - 90, '★彡♥~*~*~✧~*~*~♥彡★', menuConfig).setOrigin(0.5)
+        this.add.text(game.config.width/2, game.config.height/2 - borderUISize - 90, '★☆♥˜”*°•.˜”*°•  ✧  •°*”˜.•°*”˜♥☆★', menuConfig).setOrigin(0.5)
         this.add.text(game.config.width/2, game.config.height/2, ' ~ use space bar to jump ~', menuConfig).setOrigin(0.5)
         this.add.text(game.config.width/2, game.config.height/2 + borderUISize + borderPadding, 'jump in time before the platforms close \nand earn as many points as you can!\nsurvive as a blob and don\'t get squished!', menuConfig).setOrigin(0.5)
 
         menuConfig.backgroundColor = '#9a6498'
         menuConfig.color = '#000'
         this.add.text(game.config.width/2, game.config.height/2 + borderUISize * 3 + borderPadding * 3, 'Press space to start!', menuConfig).setOrigin(0.5)
-        
+        this.add.text(game.config.width/2, game.config.height/2 + borderUISize * 3 + borderPadding * 3 + 100, 'Press [F] to go to credits!', menuConfig).setOrigin(0.5)
         // define keys
+        keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F)
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
     }
 
     update() {
-        // skip to play scene for debugging
+        // moving on from one scene to the next depending on input
         if (Phaser.Input.Keyboard.JustDown(keySPACE)) {
             this.scene.start("playScene")
+        }
+        if (Phaser.Input.Keyboard.JustDown(keyF)) {
+            this.scene.start("creditsScene")
         }
         
     }

@@ -4,6 +4,7 @@ class Play extends Phaser.Scene {
     }
 
     create() {
+        
         this.add.text(20, 20, "play scene for squash hop")
     }
 }
