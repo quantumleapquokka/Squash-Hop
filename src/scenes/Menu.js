@@ -60,14 +60,19 @@ class Menu extends Phaser.Scene {
 
         menuConfig.backgroundColor = '#9a6498'
         menuConfig.color = '#000'
-        this.add.text(game.config.width/2, game.config.height/2 + borderUISize * 3 + borderPadding * 3, 'Press space to start!', menuConfig).setOrigin(0.5)
-        this.add.text(game.config.width/2, game.config.height/2 + borderUISize * 3 + borderPadding * 3 + 100, 'Press [F] to go to credits!', menuConfig).setOrigin(0.5)
+        this.add.text(game.config.width/2, game.config.height/2 + borderUISize * 3 + borderPadding * 3, 'Press space to start !', menuConfig).setOrigin(0.5)
+        this.add.text(game.config.width/2, game.config.height/2 + borderUISize * 3 + borderPadding * 3 + 100, 'Press [F] to go to credits !', menuConfig).setOrigin(0.5)
         // define keys
         keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F)
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
+        
+        // skip to play scene for debugging 
+        this.scene.start("playScene") 
     }
 
     update() {
+        
+
         // moving on from one scene to the next depending on input
         if (Phaser.Input.Keyboard.JustDown(keySPACE)) {
             this.scene.start("playScene")
