@@ -24,7 +24,8 @@ class Menu extends Phaser.Scene {
     }
 
     create() {
-        
+        let highScore = localStorage.getItem("highScore") || 0
+
         // background color
         this.cameras.main.setBackgroundColor('#b18fd0'); 
 
@@ -38,7 +39,7 @@ class Menu extends Phaser.Scene {
                 bottom: 5,
             },
             fixedWidth: 0,
-            aligh: 'center'
+            align: 'center'
         }
 
         // display menu text
@@ -48,7 +49,7 @@ class Menu extends Phaser.Scene {
         menuConfig.fontSize = '35px'
         this.add.text(game.config.width/2, game.config.height/2 - borderUISize - 90, '★☆♥˜”*°•.˜”*°•  ✧  •°*”˜.•°*”˜♥☆★', menuConfig).setOrigin(0.5)
         this.add.text(game.config.width/2, game.config.height/2, ' ~ use space bar to jump ~', menuConfig).setOrigin(0.5)
-        this.add.text(game.config.width/2, game.config.height/2 + borderUISize + borderPadding, 'jump in time before the platforms close \nand earn as many points as you can!\nsurvive as a blob and don\'t get squished!', menuConfig).setOrigin(0.5)
+        this.add.text(game.config.width/2, game.config.height/2 + borderUISize + borderPadding + 50, 'jump and avoid falling down(u die)\npass as many platforms as you can\n and don\'t get squished!\nr.i.p to your ears if you touch the platforms', menuConfig).setOrigin(0.5)
 
         menuConfig.backgroundColor = '#9a6498'
         menuConfig.color = '#000'
@@ -59,7 +60,10 @@ class Menu extends Phaser.Scene {
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
         
         // skip to play scene for debugging 
-        this.scene.start("playScene") 
+        // this.scene.start("playScene") 
+
+        // display high score
+        let highScoreText = this.add.text(20, 20, "High Score: " + highScore, menuConfig).setOrigin(0,0)
     }
 
     update() {

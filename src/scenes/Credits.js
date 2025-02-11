@@ -25,7 +25,7 @@ class Credits extends Phaser.Scene {
         creditsConfig.fontSize = '35px'
         this.add.text(game.config.width/2, game.config.height/2 - borderUISize - 90, '★彡♥~*~*~✧~*~*~♥彡★', creditsConfig).setOrigin(0.5)
         this.add.text(game.config.width/2, game.config.height/2, ' Visual Assets(sprites, ui, etc.): Samantha Siew', creditsConfig).setOrigin(0.5)
-        this.add.text(game.config.width/2, game.config.height/2 + borderUISize + borderPadding, 'Background Music:\n (borrowed from my friend) Alasdair Lam\'s original composition', creditsConfig).setOrigin(0.5)
+        this.add.text(game.config.width/2, game.config.height/2 + borderUISize + borderPadding, 'Background Music:\n (borrowed from my friend)\n Alasdair Lam\'s original composition', creditsConfig).setOrigin(0.5)
 
         creditsConfig.backgroundColor = '#9a6498'
         creditsConfig.color = '#000'
