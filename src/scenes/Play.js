@@ -24,6 +24,20 @@ class Play extends Phaser.Scene {
         this.blob = new Blob(this, 400, 928, 'blob')
         this.add.existing(this.blob)
 
+        // Add start message
+        this.startText = this.add.text(400, 300, "Press SPACE to Start", {
+            fontSize: "32px",
+            fill: "#fff"
+        }).setOrigin(0.5)
+
+        // Disable movement before start
+        this.gameStarted = false
+
+        // Listen for space key
+        this.input.keyboard.once('keydown-SPACE', () => {
+            this.startGame()
+        })
+
         
         this.spawnInitialPlatforms() 
 
@@ -69,7 +83,14 @@ class Play extends Phaser.Scene {
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
     }
 
+    startGame() {
+        this.startText.destroy()
+        this.gameStarted = true
+    }
+
     update() {
+        if (!this.gameStarted) return
+        
         this.cameras.main.scrollY -= 1
         this.gradient.tilePositionY -= 1
 
