@@ -10,8 +10,8 @@ class Play extends Phaser.Scene {
         this.gradient = this.add.tileSprite(400, 500, 800, 2000, 'background').setOrigin(0.5, 0.75)
         
         // add borders
-        this.add.rectangle(0, 0, borderUISize, game.config.height, 0x00000).setOrigin(0, 0);
-        this.add.rectangle(game.config.width - borderUISize, 0, borderUISize, game.config.height, 0x00000).setOrigin(0, 0)
+        this.add.rectangle(0, 0, borderUISize, game.config.height, 0x00000).setOrigin(0, 0).setScrollFactor(0)
+        this.add.rectangle(game.config.width - borderUISize, 0, borderUISize, game.config.height, 0x00000).setOrigin(0, 0).setScrollFactor(0)
 
         // Physics group for moving platforms
         this.plats = this.physics.add.group({
@@ -19,9 +19,6 @@ class Play extends Phaser.Scene {
             allowGravity: false
         })
 
-        // // jump platforms 
-        // this.platLeft = this.physics.add.sprite(0, height / 4 * 3, 'platform').setOrigin(0, 0).setImmovable(true)
-        // this.platRight = this.physics.add.sprite(800, height / 4 * 3, 'platform').setOrigin(1, 0).setImmovable(true)
 
         // add blob
         this.blob = new Blob(this, 400, 928, 'blob')
@@ -41,7 +38,14 @@ class Play extends Phaser.Scene {
         // this.physics.add.collider(this.blob, this.plats)
         // this.physics.add.collider(this.blob, this.platLeft)
         // this.physics.add.collider(this.blob, this.platRight)
-        
+        this.time.addEvent({
+            delay: 1000, // Adjust spawn rate
+            callback: () => {
+                let highestY = Math.min(...this.plats.getChildren().map(p => p.y));
+                this.spawnPlatform(Phaser.Math.Between(100, 700), highestY - 200);
+            },
+            loop: true
+        })
         
         // blob animation configuration
         this.anims.create({
@@ -62,25 +66,24 @@ class Play extends Phaser.Scene {
             frameRate: 1
         })
 
-        // this.tweens.add({
-        //     targets: [this.platLeft, this.platRight],
-        //     x: 400, 
-        //     duration: Phaser.Math.Between(2000, 5000),
-        //     ease: 'Linear',
-        //     onComplete: () => {
-        //         this.checkDeath()
-        //     }
-        // })
-
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
     }
 
     update() {
+        this.cameras.main.scrollY -= 1
+        this.gradient.tilePositionY -= 1
+
         this.plats.children.iterate((platform) => {
+            if (!platform) return
+
             if (platform.x <= 50) {
                 platform.setVelocityX(Math.abs(platform.speed)); // Move right
             } else if (platform.x >= 750) {
                 platform.setVelocityX(-Math.abs(platform.speed)); // Move left
+            }
+
+            if (platform.y > this.cameras.main.scrollY + game.config.height) {
+                platform.destroy(); // Remove platforms that are off-screen
             }
         })
         
@@ -92,9 +95,9 @@ class Play extends Phaser.Scene {
         }
 
         // Game Over Conditions
-        if (this.blob.y > game.config.height || this.blob.x < 0 || this.blob.x > game.config.width) {
-            this.scene.restart()
-        }
+        if (this.blob.y > this.cameras.main.scrollY + game.config.height) {
+            this.scene.restart(); // Game over if the blob falls
+        }  
     }
 
     checkDeath() {
@@ -124,38 +127,14 @@ class Play extends Phaser.Scene {
         platform.speed = Phaser.Math.Between(10, 200) * (Math.random() < 0.5 ? 1 : -1)  
         platform.setVelocityX(platform.speed)
         return platform
-        // let yPos = this.blob.y - 100;  // Spawn new platform above the Blob
-        // this.platLeft = this.physics.add.sprite(0, height / 4 * 3, 'platform').setOrigin(0, 0).setImmovable(true)
-        // this.platRight = this.physics.add.sprite(800, height / 4 * 3, 'platform').setOrigin(1, 0).setImmovable(true)
-        // // let leftPlat = this.plats.create(-100, yPos, 'platform').setOrigin(0, 0).setImmovable(true)
-        // // let rightPlat = this.plats.create(900, yPos, 'platform').setOrigin(1, 0).setImmovable(true)
-
-        // // Move platforms inward
-        // // this.tweens.add({
-        // //     targets: [leftPlat, rightPlat],
-        // //     x: (target) => (target === leftPlat ? 400 - leftPlat.displayWidth / 2 : 400 + rightPlat.displayWidth / 2),
-        // //     duration: Phaser.Math.Between(2000, 4000),
-        // //     ease: 'Linear'
-        // // })
-        // this.tweens.add({
-        //     targets: [this.platLeft, this.platRight],
-        //     x: 400, 
-        //     duration: Phaser.Math.Between(2000, 5000),
-        //     ease: 'Linear',
-        //     onComplete: () => {
-        //         this.checkDeath()
-        //     }
-        // })
-
-        
-        // this.physics.add.collider(this.blob, this.platLeft)
-        // this.physics.add.collider(this.blob, this.platRight)
-
-        // // Store reference to current platform
-        // this.currentPlatform = { left: this.leftPlat, right: this.rightPlat }
     }
 
     onLand(blob, platform) {
+        let highestY = Math.min(...this.plats.getChildren().map(p => p.y))
+    
+        // Spawn a new platform above the highest one
+        this.spawnPlatform(Phaser.Math.Between(100, 700), highestY - 200)
+        
         if (blob.body.touching.down) {
             let highestY = Math.min(...this.plats.getChildren().map(p => p.y))
             this.spawnPlatform(Phaser.Math.Between(100, 700), highestY - 200)
