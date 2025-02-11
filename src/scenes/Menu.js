@@ -24,14 +24,6 @@ class Menu extends Phaser.Scene {
     }
 
     create() {
-        // blob animation configuration
-        if (!this.anims.exists('blobJump')) {
-            this.anims.create({
-                key: 'blobJump',
-                frames: this.anims.generateFrameNumbers('blob', {start: 0, end: 2}),
-                frameRate: 8,
-            })
-        }
         
         // background color
         this.cameras.main.setBackgroundColor('#b18fd0'); 
@@ -75,9 +67,11 @@ class Menu extends Phaser.Scene {
 
         // moving on from one scene to the next depending on input
         if (Phaser.Input.Keyboard.JustDown(keySPACE)) {
+            this.sound.play('select')
             this.scene.start("playScene")
         }
         if (Phaser.Input.Keyboard.JustDown(keyF)) {
+            this.sound.play('select')
             this.scene.start("creditsScene")
         }
         

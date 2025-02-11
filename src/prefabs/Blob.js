@@ -6,9 +6,9 @@ class Blob extends Phaser.Physics.Arcade.Sprite {
         scene.physics.add. existing(this)
 
         this.setCollideWorldBounds(true)
-        this.body.setGravityY(500)
+        this.body.setGravityY(700)
 
-        this.setDragX(1000)
+        this.setDragX(1200)
         this.setFriction(1, 1)
 
         this.keySPACE = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)

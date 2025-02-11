@@ -38,6 +38,7 @@ class Credits extends Phaser.Scene {
     update() {
         // skip to play scene for debugging
         if (Phaser.Input.Keyboard.JustDown(keyF)) {
+            this.sound.play('select')
             this.scene.start("menuScene")
         }
         
